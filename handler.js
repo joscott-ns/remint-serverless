@@ -17,14 +17,10 @@ module.exports.remint = (event, context, callback) => {
     const secret = process.env.SECRET;
     const ttl = process.env.TTL;
 
-
-    console.log("secret:", secret);
-
     let eid = event["queryStringParameters"]['eid'];
 
     try {
         let token = jwt.verify(eid, secret, {algorithms: ['HS512'], maxAge: ttl * 60});
-        // let token = jwt.decode(eid);
         let ping = {};
         ping.businessEntity = {};
         ping.businessEntity.encryptedId = jwt.sign({ "ns-uid": token['ns-uid'], "ns-aid":token['ns-aid']}, secret);
