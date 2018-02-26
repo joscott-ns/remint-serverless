@@ -1,6 +1,7 @@
 'use strict';
 
-const AWS = require("aws-sdk");
+const AWSXRay = require('aws-xray-sdk-core');
+const AWS = AWSXRay.captureAWS(require('aws-sdk'));
 AWS.config.update({region: "us-west-2"});
 const jwt = require('jsonwebtoken');
 
@@ -16,8 +17,6 @@ module.exports.remint = (event, context, callback) => {
 
     const secret = process.env.SECRET;
     const ttl = process.env.TTL;
-
-    console.log("secret", secret);
 
 
     let eid = event["queryStringParameters"]['eid'];
@@ -46,8 +45,6 @@ module.exports.mint = (event, context, callback) => {
     });
 
     const secret = process.env.SECRET;
-
-    console.log("secret", secret);
 
     let sapId = event["queryStringParameters"]['sapid'];
 

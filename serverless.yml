@@ -3,6 +3,17 @@ service: remint
 provider:
   name: aws
   runtime: nodejs6.10
+  tracing: true
+  deploymentBucket:
+      name: com.nuskin.${self:provider.region}.deploys
+      serverSideEncryption: AES256 # when using server-side encryption
+  iamRoleStatements:
+   - Effect: "Allow"
+     Action:
+       - "xray:PutTraceSegments"
+       - "xray:PutTelemetryRecords"
+     Resource:
+       - "*"
 
 functions:
   remint:
@@ -27,3 +38,4 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-plugin-tracing
