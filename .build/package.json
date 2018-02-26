@@ -1,0 +1,12 @@
+{
+  "name": "remint",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-offline": "^3.18.0",
+    "serverless-plugin-chrome": "^1.0.0-38",
+    "serverless-plugin-simulate": "0.0.17",
+    "serverless-sam": "0.0.4"
+  }
+}

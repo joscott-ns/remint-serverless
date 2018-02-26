@@ -1,0 +1,13 @@
+{
+  "name": "remint",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "aws-sdk": "^2.202.0",
+    "jsonwebtoken": "^8.1.1"
+  },
+  "devDependencies": {
+    "serverless-offline": "^3.18.0",
+    "serverless-sam": "0.0.4"
+  }
+}
