@@ -3,9 +3,10 @@ service: remint
 provider:
   name: aws
   runtime: nodejs6.10
+  region: us-west-2
   tracing: true
-  deploymentBucket:
-      name: com.nuskin.${self:provider.region}.deploys
+ deploymentBucket:
+      name: com.nuskin.us-west-2.deploys
       serverSideEncryption: AES256 # when using server-side encryption
   iamRoleStatements:
    - Effect: "Allow"
@@ -26,15 +27,6 @@ functions:
         path: remint
         method: get
         cors: true
-  mint:
-      environment:
-        SECRET: ${ssm:/remint/secret~true}
-      handler: handler.mint
-      events:
-       - http:
-          path: mint
-          method: get
-          cors: true
 
 plugins:
   - serverless-offline

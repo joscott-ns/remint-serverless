@@ -33,7 +33,7 @@ module.exports.remint = (event, context, callback) => {
     }
 };
 
-
+/*
 module.exports.mint = (event, context, callback) => {
 
     const done = (err, res) => callback(null, {
@@ -56,3 +56,4 @@ module.exports.mint = (event, context, callback) => {
         done(err, null);
     }
 };
+*/
