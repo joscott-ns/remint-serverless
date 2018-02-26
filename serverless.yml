@@ -12,9 +12,18 @@ functions:
     handler: handler.remint
     events:
      - http:
-        path: remint/{id}
+        path: remint
         method: get
         cors: true
+  mint:
+      environment:
+        SECRET: ${ssm:/remint/secret~true}
+      handler: handler.mint
+      events:
+       - http:
+          path: mint
+          method: get
+          cors: true
 
 plugins:
   - serverless-offline
