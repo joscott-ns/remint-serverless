@@ -1,18 +1,12 @@
 service: remint
 
-custom:
-  defaultStage: dev
-  profiles:
-    dev: dev
-    prod: prod
-    test: dev
-
 provider:
   name: aws
   runtime: nodejs6.10
-  stage:  ${opt:stage, self:custom.defaultStage}
-  profile: ${self:custom.profiles.${self:provider.stage}}
-  tracing: true
+  region: us-west-2
+  deploymentBucket:
+      name: com.nuskin.us-west-2.deploys
+      serverSideEncryption: AES256 # when using server-side encryption
 
 functions:
   remint:
@@ -22,7 +16,7 @@ functions:
     handler: handler.remint
     events:
      - http:
-        path: remint/{id}
+        path: remint
         method: get
         cors: true
 
