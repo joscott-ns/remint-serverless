@@ -1,19 +1,18 @@
 service: remint
 
+custom:
+  defaultStage: dev
+  profiles:
+    dev: dev
+    prod: prod
+    test: dev
+
 provider:
   name: aws
   runtime: nodejs6.10
-  region: us-west-2
+  stage:  ${opt:stage, self:custom.defaultStage}
+  profile: ${self:custom.profiles.${self:provider.stage}}
   tracing: true
-  deploymentBucket:
-      name: com.nuskin.us-west-2.deploys
-  iamRoleStatements:
-   - Effect: "Allow"
-     Action:
-       - "xray:PutTraceSegments"
-       - "xray:PutTelemetryRecords"
-     Resource:
-       - "*"
 
 functions:
   remint:
@@ -23,7 +22,7 @@ functions:
     handler: handler.remint
     events:
      - http:
-        path: remint
+        path: remint/{id}
         method: get
         cors: true
 
