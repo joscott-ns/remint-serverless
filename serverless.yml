@@ -7,7 +7,6 @@ provider:
   tracing: true
   deploymentBucket:
       name: com.nuskin.us-west-2.deploys
-      serverSideEncryption: AES256 # when using server-side encryption
   iamRoleStatements:
    - Effect: "Allow"
      Action:
