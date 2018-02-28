@@ -6,6 +6,7 @@ provider:
   region: us-west-2
   deploymentBucket:
       name: com.nuskin.us-west-2.deploys
+      serverSideEncryption: AES256 # when using server-side encryption
 
 functions:
   remint:
