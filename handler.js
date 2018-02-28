@@ -15,22 +15,7 @@ module.exports.remint = (event, context, callback) => {
         },
     });
 
-    const secret = process.env.SECRET;
-    const ttl = process.env.TTL;
-
-
-    let eid = event["queryStringParameters"]['eid'];
-
-    try {
-        let token = jwt.verify(eid, secret, {algorithms: ['HS256'], maxAge: ttl * 60});
-        let ping = {};
-        ping.businessEntity = {};
-        ping.businessEntity.encryptedId = jwt.sign({ "ns-uid": token['ns-uid'], "ns-aid":token['ns-aid']}, secret);
-        done(null, ping);
-    } catch (err){
-        console.log("err", err);
-        done(err, null);
-    }
+    done(null, {"name":"Joshua"})
 };
 
 /*
