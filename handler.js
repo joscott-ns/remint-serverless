@@ -6,16 +6,24 @@ AWS.config.update({region: "us-west-2"});
 const jwt = require('jsonwebtoken');
 const response = require('./ns-response.js');
 
-module.exports.mint = (event, context, callback) => {
+response.cors = true;
 
-    const secret = process.env.SECRET;
-    let sapId = event["queryStringParameters"]['sapid'];
+module.exports.remint = (event, context, callback) => {
+
+    const secret = Buffer.from(process.env.SECRET, 'base64');
+    const ttl = process.env.TTL;
+
+    let eid = event.eid;
 
     try {
-        let encryptedId = jwt.sign({ "ns-uid": sapId, "ns-aid":sapId}, secret);
-        response.done(null, {"eid":encryptedId});
-    } catch (err){
+        let token = jwt.verify(eid, secret, { algorithm: ['HS256'], maxAge: ttl * 60 });
+        console.log('Token:', token);
+        let ping = {};
+        ping.businessEntity = {};
+        ping.businessEntity.encryptedId = jwt.sign({ "ns-uid": token['ns-uid'], "ns-aid": token['ns-aid'] }, secret);
+        response.done(null, ping, callback);
+    } catch (err) {
         console.log("err", err);
-        response.done(err, null);
+        response.done(err, null, callback);
     }
 };

@@ -1,6 +1,8 @@
 'use strict';
 
-const responseHeaders = {
+let cors = true;
+
+let corsHeaders = {
     'Content-Type': 'application/json',
     // Required for CORS support to work
     'Access-Control-Allow-Origin': '*',
@@ -9,11 +11,18 @@ const responseHeaders = {
 };
 
 
-module.exports.done = (err, res) => callback(null, {
-    statusCode: err ? '400' : '200',
-    body: err ? err.message : JSON.stringify(res),
-    headers: responseHeaders,
-});
+module.exports.done = (err, res, callback) => {
+    let resp = {
+        statusCode: err ? '400' : '200',
+        body: err ? err.message : JSON.stringify(res)
+    };
+    if(cors) {
+        resp.headers = corsHeaders;
+    } else{
+        resp.headers = {'Content-Type': 'application/json'};
+    }
+    callback(null,resp);
+};
 
 
 
