@@ -6,7 +6,7 @@ phases:
       - npm run install:lambda
   build:
     commands:
-      - npm run deploy:cicd
+      - npm run deploy:ci
   post_build:
     commands:
       - npm run test:remote
