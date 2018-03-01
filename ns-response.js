@@ -1,28 +1,67 @@
 'use strict';
 
-let cors = true;
-
-let corsHeaders = {
-    'Content-Type': 'application/json',
-    // Required for CORS support to work
-    'Access-Control-Allow-Origin': '*',
-    // Required for cookies, authorization headers with HTTPS
-    'Access-Control-Allow-Credentials': true
-};
+let options = {
+    origins: [], // if left blank then all domains will be allowed
+    // origins: ["https://www.nuskin.com", "https://test.nuskin.com", "https://dev.nuskin.com"]
+    allowCredentials: false,
+    allowMethod: null,
+    maxAge: null
+}
 
 
-module.exports.done = (err, res, callback) => {
-    let resp = {
-        statusCode: err ? '400' : '200',
-        body: err ? err.message : JSON.stringify(res)
-    };
-    if(cors) {
-        resp.headers = corsHeaders;
-    } else{
-        resp.headers = {'Content-Type': 'application/json'};
-    }
-    callback(null,resp);
-};
+module.exports = (handler) =>
+    (event, context, callback) =>
+        handler(event, context, (err, data) => {
+
+
+            console.log("error message", err.message);
+
+            let res = {
+                statusCode: err ? '400' : '200',
+                body: err ? err.message : JSON.stringify(data),
+                headers: {'Content-Type': 'application/json'}
+            };
+
+
+            if (options.origins.length > 1) {
+                let matchedCORS = options.origins
+                    .map(o => o.trim())
+                    .filter(o => o === event.headers.origin);
+
+                if (matchedCORS.length > 0) {
+                    res.headers = res.headers || {};
+                    if (!!options.maxAge) {
+                        res.headers["Access-Control-Max-Age"] = options.maxAge;
+                    }
+                    res.headers['Access-Control-Allow-Headers'] =
+                        options.allowMethod ?
+                            options.allowMethod.join(",")
+                            : "GET,HEAD,PUT,PATCH,POST,DELETE";
+                    res.headers['Access-Control-Allow-Credentials'] =
+                        JSON.stringify(!!options.allowCredentials);
+                    res.headers['Access-Control-Allow-Origin'] =
+                        event.headers.origin;
+                }
+
+            } else {
+                res.headers = res.headers || {};
+                if (!!options.maxAge) {
+                    res.headers["Access-Control-Max-Age"] = options.maxAge;
+                }
+                res.headers['Access-Control-Allow-Headers'] =
+                    options.allowMethod ?
+                        options.allowMethod.join(",")
+                        : "GET,HEAD,PUT,PATCH,POST,DELETE";
+                res.headers['Access-Control-Allow-Credentials'] =
+                    JSON.stringify(!!options.allowCredentials);
+                res.headers['Access-Control-Allow-Origin'] = "*";
+            }
+
+            callback(null, res);
+
+
+        });
+
 
 
 

@@ -19,7 +19,5 @@ functions:
         path: remint
         method: get
         cors: true
-
 plugins:
   - serverless-offline
-  - serverless-plugin-tracing
