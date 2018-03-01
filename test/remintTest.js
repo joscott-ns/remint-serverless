@@ -16,7 +16,7 @@ describe('Remint', function() {
             },
         }).then(response => response.json())
             .then((user) => {
-                return fetch("https://" + process.env.FUNCTION_ENDPOINT + "/remint?eid=" + user.businessEntity.encryptedId);
+                return fetch(conf.url + "/remint?eid=" + user.businessEntity.encryptedId);
             })
             .then(response => response.json())
             .then((nuToken) => {
