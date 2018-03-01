@@ -2,11 +2,11 @@
 
 let options = {
     origins: [], // if left blank then all domains will be allowed
-    // origins: ["https://www.nuskin.com", "https://test.nuskin.com", "https://dev.nuskin.com"]
+    //origins: ["https://www.nuskin.com", "https://test.nuskin.com", "https://dev.nuskin.com"],
     allowCredentials: false,
     allowMethod: null,
     maxAge: null
-}
+};
 
 
 module.exports = (handler) =>
@@ -55,11 +55,8 @@ module.exports = (handler) =>
                 res.headers['Access-Control-Allow-Credentials'] =
                     JSON.stringify(!!options.allowCredentials);
                 res.headers['Access-Control-Allow-Origin'] = "*";
-            }
-
-            callback(null, res);
-
-
+            };
+            callback(null, res);;
         });
 
 

@@ -15,9 +15,7 @@ module.exports.remint = cors((event, context, callback) => {
 
     try {
         let token = jwt.verify(eid, secret, { algorithm: ['HS256'], maxAge: ttl * 60 });
-        console.log('Token:', token);
-        let ping = {};
-        ping.businessEntity = {};
+        let ping = ping.businessEntity = {};
         ping.businessEntity.encryptedId = jwt.sign({ "ns-uid": token['ns-uid'], "ns-aid": token['ns-aid'] }, secret);
         callback(null, ping);
     } catch (err) {
