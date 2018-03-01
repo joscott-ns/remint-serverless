@@ -1,36 +1,43 @@
 const assert = require('assert');
-const request = require('request');
-const fs = require('fs');
+const fetch = require("node-fetch");
+const config = require("config");
 
 describe('Remint', function() {
     this.timeout(5000);
     it('should attempt to remint a token', function(done) {
-        // Build and log the path
-        var path = "https://" + process.env.TODOS_ENDPOINT + "/todos";
+        let conf = config.get('remint');
 
-        // Fetch the comparison payload
-        require.extensions['.txt'] = function (module, filename) {
-            module.exports = fs.readFileSync(filename, 'utf8');
-        };
-        var desiredPayload = require("./data/newTodo1.json");
-
-        // Create the new todo
-        var options = {'url' : path, 'form': JSON.stringify(desiredPayload)};
-        request.post(options, function (err, res, body){
-            if(err){
-                throw new Error("Create call failed: " + err);
-            }
-            assert.equal(200, res.statusCode, "Create Status Code != 200 (" + res.statusCode + ")");
-            var todo = JSON.parse(res.body);
-            // Now delete the todo
-            var deletePath = path + "/" + todo.id;
-            request.del(deletePath, function (err, res, body){
-                if(err){
-                    throw new Error("Delete call failed: " + err);
-                }
-                assert.equal(200, res.statusCode, "Delete Status Code != 200 (" + res.statusCode + ")");
+        fetch(conf.domain + "/simpleBe/api/v1/be", {
+            headers: {
+                'Content-Type': 'application/json',
+                'client_id': conf.client_id,
+                'client_secret': conf.client_secret,
+                'Authorization': 'Basic ' + Buffer.from('usdist:Abcd1234').toString('base64')
+            },
+        }).then(response => response.json())
+            .then((user) => {
+                return fetch("https://" + process.env.FUNCTION_ENDPOINT + "/remint?eid=" + user.businessEntity.encryptedId);
+            })
+            .then(response => response.json())
+            .then((nuToken) => {
+                console.log("token", nuToken);
+                return fetch(conf.domain + "/simpleBe/api/eid/be?eid=" + nuToken.businessEntity.encryptedId, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'client_id': conf.client_id,
+                        'client_secret': conf.client_secret,
+                    },
+                });
+            }).then(response => {
+            assert(200, response.status);
+            console.log("response", response.body)
+            done();
+        }).catch(err => {
+                console.error(err);
                 done();
-            });
-        });
+            }
+        );
     });
 });
+
+
