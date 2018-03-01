@@ -1,20 +1,16 @@
 'use strict';
 
 let options = {
-    origins: [], // if left blank then all domains will be allowed
-    //origins: ["https://www.nuskin.com", "https://test.nuskin.com", "https://dev.nuskin.com"],
+    //origins: [], // if left blank then all domains will be allowed
+    origins: ["https://www.nuskin.com", "https://test.nuskin.com", "https://dev.nuskin.com"],
     allowCredentials: false,
     allowMethod: null,
     maxAge: null
 };
 
-
 module.exports = (handler) =>
     (event, context, callback) =>
         handler(event, context, (err, data) => {
-
-
-            console.log("error message", err.message);
 
             let res = {
                 statusCode: err ? '400' : '200',

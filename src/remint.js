@@ -5,8 +5,7 @@ AWS.config.update({region: "us-west-2"});
 const jwt = require('jsonwebtoken');
 let cors = require("../ns-response.js");
 
-
-module.exports.remint = cors((event, context, callback) => {
+module.exports.handler = cors((event, context, callback) => {
 
     const secret = Buffer.from(process.env.SECRET, 'base64');
     const ttl = process.env.TTL;

@@ -1,12 +1,9 @@
-version: 0.2
+version: 0.1
 phases:
   install:
     commands:
       - npm install
-      - npm run install:lambda
+      - npm install -g serverless
   build:
     commands:
-      - npm run deploy:ci
-  post_build:
-    commands:
-      - npm run test:remote
+      - serverless deploy --stage cicd | tee deploy.out

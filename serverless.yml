@@ -13,7 +13,7 @@ functions:
     environment:
       SECRET: ${ssm:/remint/secret~true}
       TTL: 40
-    handler: handler.remint
+    handler: src/remint.handler
     events:
      - http:
         path: remint
